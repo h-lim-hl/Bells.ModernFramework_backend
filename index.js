@@ -1,17 +1,32 @@
 const express = require("express");
 const cors = require("cors");
+const mysql = require("mysql2/promise");
+const pool = require("./database");
 require("dotenv").config();
 
-const app = express();
+const productsRouter = require("./routes/products");
 
+const app = express();
 app.use(express.json());
 app.use(cors());
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
 app.get("/", (req, res)=>{
   res.json({
     message: "Welcome to the API!"
   });
 });
+
+app.use("/api/products", productsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listion(PORT, ()=>{
