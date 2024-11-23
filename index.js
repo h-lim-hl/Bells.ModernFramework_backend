@@ -8,6 +8,7 @@ const pool = require("./database"); // needs .env info
 
 const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/users");
+const cartRoutes = require("./routes/cart");
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,7 @@ app.get("/", (req, res)=>{
 
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/cart", cartRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listion(PORT, ()=>{
