@@ -22,6 +22,7 @@ router.put('/', async (req, res) => {
      await cartService.updateCart(req.user.userId, cartItems);
      res.json({message:"Cart updated successfully"});
   } catch (error) {
+    console.error("api/cart.put: ", error);
      res.status(500).json({ message: error.message });
   }
 });

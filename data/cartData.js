@@ -17,17 +17,18 @@ async function getCartContents(userId) {
   }
 }
 
-async function updateCart(userId, cartItem) {
+async function updateCart(userId, cartItems) {
   const connection = await pool.getConnection();
 
   try {
     await connection.beginTransaction();
-
+    console.log("userId=", userId)
     await connection.query(
       `
-        DELETE FROM cart_item WHERE user_id = ?
+        DELETE FROM cart_items WHERE user_id = ?
       `, [userId]
     );
+    console.log("Emptied the user's shopping cart")
 
     for (const item of cartItems) {
       await connection.query(
@@ -40,6 +41,7 @@ async function updateCart(userId, cartItem) {
 
     await connection.commit();
   } catch (error) {
+    console.error(error);
     await connection.rollback();
     throw error;
   } finally {
