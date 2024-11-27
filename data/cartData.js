@@ -29,7 +29,7 @@ async function updateCart(userId, cartItems) {
       `, [userId]
     );
     console.log("Emptied the user's shopping cart")
-
+    console.log("adding: ", cartItems);
     for (const item of cartItems) {
       await connection.query(
         `
