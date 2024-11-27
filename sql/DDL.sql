@@ -9,7 +9,7 @@ CREATE TABLE products (
   name VARCHAR(255) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   image VARCHAR(255) NOT NULL
-);
+);10
 
 -- Users table
 CREATE TABLE users (

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const cartService = require("../services/cartService");
-const authenicateToken = require("../middleware/userAuth");
+const authenicateToken = require("../middlewares/userAuth");
 
 router.use(authenicateToken);
 

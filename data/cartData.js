@@ -1,15 +1,20 @@
 const pool = require("../database");
 
 async function getCartContents(userId) {
-  const [rows] = await pool.query (
-    `
-      SELECT c.id, c.product, p.image AS imageUrl, p.name AS productName,
-      CAST(price AS DOUBLE) AS price, c.quantity
-      FROM cast_items c JOIN products p ON c.product_id = p.id
+  try {
+    const [rows] = await pool.query(
+      `
+      SELECT c.id, c.product_id, p.image AS imageUrl, p.name AS productName,
+      price, c.quantity
+      FROM cart_items c JOIN products p ON c.product_id = p.id
       WHERE c.user_id = ?
     `, [userId]
-  );
-  return rows;
+    );
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 }
 
 async function updateCart(userId, cartItem) {
@@ -32,7 +37,7 @@ async function updateCart(userId, cartItem) {
         `, [userId, item.product_id, item.quantity]
       );
     }
-    
+
     await connection.commit();
   } catch (error) {
     await connection.rollback();
@@ -40,9 +45,9 @@ async function updateCart(userId, cartItem) {
   } finally {
     connection.release();
   }
+}
 
-  module.exports = {
-    getCartContents,
-    updateCart
-  }
+module.exports = {
+  getCartContents,
+  updateCart
 }

@@ -9,7 +9,9 @@ async function getUserByEmail(email) {
 }
 
 async function createUser({ name, email, password, salutation, country, marketingPreferences }) {
+  console.log("createUser()");
   if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
+    console.error('Invalid user data');
     throw new Error('Invalid user data');
   }
 
@@ -52,23 +54,22 @@ async function createUser({ name, email, password, salutation, country, marketin
     return userId;
   } catch (error) {
     await connection.rollback();
+    console.error(error);
     throw error;
   } finally {
     connection.release();
   }
 }
 
-
-
 async function updateUser(id, { name, email, password, salutation, country, marketingPreferences }) {
   if (!id || !email || !password || typeof id !== 'number' || typeof email !== 'string' || typeof password !== 'string') {
     throw new Error('Invalid user data');
   }
-  
+
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    
+
     // Update user data
     await connection.query(
       `UPDATE users SET name = ?, email = ?, password = ?, salutation = ?, country = ? WHERE id = ?`,
@@ -85,7 +86,7 @@ async function updateUser(id, { name, email, password, salutation, country, mark
         );
       }
     }
-    
+
     await connection.commit();
   } catch (error) {
     await connection.rollback();

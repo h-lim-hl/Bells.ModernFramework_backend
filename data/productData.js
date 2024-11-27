@@ -1,10 +1,14 @@
 const pool = require('../database');
 
 async function getAllProducts() {
-  const [rows] = await pool.query('SELECT id, name,' +
-                                  'CAST(price AS DOUBLE) AS price,' + 
-                                  'image FROM products');
-  return rows;
+  try {
+    const query = 'SELECT id, name, price, image FROM products';
+    let response = await pool.query(query);
+    return response[0];
+  } catch (err) {
+    console.error("ProductData.getAllProducts(): ", err);
+  }
+  return [];
 }
 // We have to use CAST (price AS DOUBLE) because mysql2/promise automatically
 //  converts the DECIMAL data type to string, which would cause issues later on
