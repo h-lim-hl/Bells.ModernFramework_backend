@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
       country
     } = req.body;
     name ??= req.body.fullname
-    marketingPerferences = [];
+    marketingPerferences ??= [];
 
     const userId = await userService.registerUser({
       name,
