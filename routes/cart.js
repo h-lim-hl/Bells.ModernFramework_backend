@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
 // PUT bulk update cart
 router.put('/', async (req, res) => {
   try {
+    console.log("555: ", req.body.cartItems);
      const cartItems = req.body.cartItems;
      await cartService.updateCart(req.user.userId, cartItems);
      res.json({message:"Cart updated successfully"});

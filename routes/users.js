@@ -3,6 +3,10 @@ const router = express.Router();
 const userService = require('../services/userService.js');
 const jwt = require('jsonwebtoken');
 
+router.get('/', async (req, res) => {
+  res.status(200).json({message:"reached users route"});
+});
+
 // POST register a new user
 router.post('/register', async (req, res) => {
   console.log("users.post('/register')");
@@ -15,7 +19,7 @@ router.post('/register', async (req, res) => {
       marketingPerferences,
       country
     } = req.body;
-    name = req.body.fullname
+    name ??= req.body.fullname
     marketingPerferences = [];
 
     const userId = await userService.registerUser({
