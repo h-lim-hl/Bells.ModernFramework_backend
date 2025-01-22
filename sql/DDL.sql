@@ -51,7 +51,9 @@ CREATE TABLE orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   total DECIMAL(10, 2) NOT NULL,
+-- an ENUM data type is a string (varchar) but it can only be one of the specified values
   status ENUM('pending', 'completed', 'cancelled', 'shipping', 'processing') DEFAULT 'pending',
+-- for Stripe
   checkout_session_id VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 -- created_at DATETIME DEFAULT NOW(),

@@ -3,6 +3,8 @@ const router = express.Router();
 const userService = require('../services/userService.js');
 const jwt = require('jsonwebtoken');
 
+const JWT_EXPIRE_TIME = `30d`;
+
 router.get('/', async (req, res) => {
   res.status(200).json({message:"reached users route"});
 });
@@ -45,12 +47,11 @@ router.post('/login', async (req, res) => {
 
     const user = await userService.loginUser(email, password);
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET,
-      { expiresIn: "30d" });
+      { expiresIn: JWT_EXPIRE_TIME });
     res.json({ message: "Login successful", token });
   } catch (error) {
     res.status(401).json({message:error.message});
   }
 });
-
 
 module.exports = router;

@@ -1,13 +1,46 @@
 const express = require('express');
 const router = express.Router();
-// line for requiring service
-// const authenicateToken = require("../middlewares/userAuth");
+const UserAuth = require(`../middlewares/userAuth`);
+const checkoutService = require(`../service/checkoutService`);
+const stripe = require(`stripe`)(process.env.STRIPE_SECRET);
+const orderService = require(`../service/orderService`);
 
-// router.use(authenicateToken);
-
-
-router.post('/', async (res, req) => {
-  res.status(200).json({message:'Post placeholder endpoint for checkout reached.'})
+router.post("/", UserAuth, async function (req, res) {
+  try {
+    const session = await checkoutService.checkout(req.user.userId);
+    res.json(session);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      "message" : e.message
+    });
+  }
 });
+
+router.post("/webhook",
+  express.raw({ "type" : "application/json" }),
+  async function (req, res) {
+    let event = null;
+    try {
+      // Verify call is from Stripe
+      // when Stripe sends you a webhook request, there's always a signature
+      // from the WEBHOOK_SECRET, we can see if the signature is really from Stripe
+      const sig = req.headers["stripe-signature"];
+
+      //construct event to verify
+      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+
+      if (event.type === "checkout.session.completed") {
+        const session = event.data.object;
+        const orderId = session.metadata.orderId;
+        await orderService.updateOrderStatus(orderId, "processing");
+      }
+      res.sendStatus(200);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send(`Webhook Error: ${err.message}`);
+    }
+  }
+);
 
 module.exports = router;
