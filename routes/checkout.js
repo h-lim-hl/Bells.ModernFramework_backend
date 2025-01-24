@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const UserAuth = require(`../middlewares/userAuth`);
-const checkoutService = require(`../service/checkoutService`);
+const checkoutService = require(`../services/checkoutService`);
 const stripe = require(`stripe`)(process.env.STRIPE_SECRET);
-const orderService = require(`../service/orderService`);
+const orderService = require(`../services/orderService`);
 
 router.post("/", UserAuth, async function (req, res) {
   try {

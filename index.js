@@ -24,7 +24,7 @@ app.get("/", (req, res)=>{
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/cart", cartRoutes);
-app.use("/api/checkout", checkoutRoutes);
+app.use("/api/checkout/process", checkoutRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{
