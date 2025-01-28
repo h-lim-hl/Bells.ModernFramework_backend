@@ -8,12 +8,12 @@ const pool = require("./database"); // needs .env info
 const app = express();
 
 app.use(cors());
-app.use(express.json());
 
 const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/users");
 const cartRoutes = require("./routes/cart");
 const checkoutRoutes = require("./routes/checkout");
+const stripeRoutes = require("./routes/stripe");
 
 app.get("/", (req, res)=>{
   res.json({
@@ -21,10 +21,11 @@ app.get("/", (req, res)=>{
   });
 });
 
-app.use("/api/products", productsRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/cart", cartRoutes);
-app.use("/api/checkout/process", checkoutRoutes);
+app.use("/api/products", express.json(), productsRouter);
+app.use("/api/users", express.json(), usersRouter);
+app.use("/api/cart", express.json(), cartRoutes);
+app.use("/api/checkout", express.json(), checkoutRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{

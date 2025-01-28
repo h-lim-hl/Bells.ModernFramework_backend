@@ -14,6 +14,9 @@ async function createOrder(userId, orderItems) {
   try {
     await connection.beginTransaction();
 
+    // Calculate total order amount
+    const total = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
     const [orderResult] = await connection.query(
       `INSERT INTO ${ORDER_TABLE} (user_id, total) VALUES (?, ?)`,
       [userId, total]
@@ -28,7 +31,8 @@ async function createOrder(userId, orderItems) {
     }
 
     await connection.commit();
-    return orderId;
+
+    return { orderId, total };
 
   } catch (e) {
     await connection.rollback();
@@ -71,5 +75,5 @@ module.exports = {
   createOrder,
   getOrderDetails,
   updateOrderStatus,
-  updateOrderSessionId
+  updateOrderSessionId,
 };

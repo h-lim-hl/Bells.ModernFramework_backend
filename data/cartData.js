@@ -28,26 +28,23 @@ async function updateCart(userId, cartItems) {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    console.log("userId=", userId)
-    console.log("delete query");
+    // console.log("userId=", userId)
+    // console.log("delete query");
     await connection.query(
-      `
-        DELETE FROM cart_items WHERE user_id = ?
-      `, [userId]
+      `DELETE FROM cart_items WHERE user_id = ?`, [userId]
     );
-    console.log("Emptied the user's shopping cart")
-    console.log("cartItems: ", cartItems);
-    console.log("start for");
+    //console.log("Emptied the user's shopping cart")
+    //console.log("cartItems: ", cartItems);
+    //console.log("start for");
     for (const item of cartItems) {
       console.log("insert query: ", item);
       await connection.query(
-        `
-          INSERT INTO cart_items (user_id, product_id, quantity)
-          VALUES (?, ?, ?)
+        `INSERT INTO cart_items (user_id, product_id, quantity) 
+         VALUES (?, ?, ?)
         `, [userId, item.product_id, item.quantity]
       );
     }
-    console.log("end for");
+    // console.log("end for");
 
     await connection.commit();
   } catch (error) {

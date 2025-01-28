@@ -1,4 +1,4 @@
-const stripe =require("stripe")(process.env.STRIPE_SECRET);
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 function createLineItems(orderItems) {
   // line items is in an array of object
@@ -47,6 +47,27 @@ async function createCheckoutSession(userId, orderItems, orderId) {
   return session;
 }
 
+async function createPaymentIntent(userId, orderId, amount, currency) {
+  console.log("createPaymentIntent: ", userId, orderId, amount, currency);
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+      "metadata" : {
+        "userId" : userId,
+        "orderId" : orderId
+      }
+    });
+    return paymentIntent;
+  } catch (err) {
+    console.error("Error creating paymentIntent: ", err.message);
+    throw err;
+  }
+
+
+}
+
+
 module.exports = {
-  createLineItems, createCheckoutSession
+  createLineItems, createCheckoutSession, createPaymentIntent
 }

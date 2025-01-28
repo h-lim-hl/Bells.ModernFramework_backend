@@ -4,7 +4,7 @@ async function getOrdersByUserId(userId) {
     return await orderData.getOrdersByUserId(userId);
 }
 
-async function createOrder(userId, orderItems ) {
+async function createOrder(userId, orderItems) {
     // 1. Store the user's purchase history
     // 2. Add a new data point to storage for machine learning (Mongo or Redis)
     return await orderData.createOrder(userId, orderItems);
@@ -27,10 +27,15 @@ async function updateOrderStatus(orderId, status) {
     return await orderData.updateOrderStatus(orderId, status);
 }
 
+async function getOrderTotal(orderId) {
+    const total = await orderData.getOrderTotal(orderId);
+    return total;
+}
 module.exports = {
     getOrdersByUserId,
     createOrder,
     getOrderDetails,
     updateOrderStatus,
-    updateOrderSessionId
+    updateOrderSessionId,
+    getOrderTotal
 };
