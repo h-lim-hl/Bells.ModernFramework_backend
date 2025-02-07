@@ -5,8 +5,11 @@ const checkoutService = require(`../services/checkoutService`);
 const stripe = require(`stripe`)(process.env.STRIPE_SECRET);
 const orderService = require(`../services/orderService`);
 
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+
 //create checkout session
-router.post("/session", UserAuth, async function (req, res) {
+router.post("/session", UserAuth, csrfProtection, async function (req, res) {
   try {
     const session = await checkoutService.checkout(req.user.userId, "CheckoutSession");
     res.json(session);
@@ -19,7 +22,7 @@ router.post("/session", UserAuth, async function (req, res) {
 });
 
 //create payment intent
-router.post("/paymentIntent", UserAuth, async function (req, res) {
+router.post("/paymentIntent", UserAuth, csrfProtection, async function (req, res) {
   try {
     const paymentIntent =
       await checkoutService.checkout(req.user.userId, "PaymentIntent");

@@ -96,8 +96,22 @@ async function updateUser(id, { name, email, password, salutation, country, mark
   }
 }
 
+async function getUserRole(user_id) {
+  const [rows] = await pool.query(
+    ` SELECT role_type
+      FROM role_types
+      JOIN staff_roles ON role_types.id = staff_roles.staff_type
+      JOIN users ON staff_roles.user_id = users.id
+      WHERE users.id = ?;
+    `, [user_id]
+  );
+
+  return rows;
+}
+
 module.exports = {
   getUserByEmail,
   createUser,
-  updateUser
+  updateUser,
+  getUserRole
 };

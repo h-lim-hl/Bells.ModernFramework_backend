@@ -6,12 +6,12 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET);
 
 const orderService= require("../services/orderService");
 
-router.post("/paymentIntent", async (req, res) => {
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount
-  });
-  res.sendStatus(200);
-});
+// router.post("/paymentIntent", async (req, res) => {
+//   const paymentIntent = await stripe.paymentIntents.create({
+//     amount
+//   });
+//   res.sendStatus(200);
+// });
 
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
