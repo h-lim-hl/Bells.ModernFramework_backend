@@ -37,7 +37,13 @@ async function loginUser(email, password) {
   return user;
 }
 
+async function getUserRole(user_id) {
+  const role = await userDate.getUserRole(user_id);
+  return role; // undefined or null is non-staff
+}
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  getUserRole
 };

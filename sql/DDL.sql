@@ -132,7 +132,7 @@ CREATE TABLE discounts (
   start_datetime DATETIME DEFAULT NULL,
   end_datetime DATETIME DEFAULT NULL,
   amount DECIMAL(5,3) NOT NULL,
-  description VARCHAR(500) DEFAULT NULL,
+  description_id INT DEFAULT NULL,
   FOREIGN KEY (discount_type) REFERENCES discount_types(id)
 );
 
@@ -149,7 +149,7 @@ CREATE TABLE personal_discounts (
 CREATE TABLE discount_descriptions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   discount_id INT NOT NULL,
-  description VARCAR(500) DEFAULT NULL,
+  description VARCHAR(500) DEFAULT NULL,
   FOREIGN KEY (discount_id) REFERENCES discounts(id) ON DELETE CASCADE
 );
 
@@ -159,7 +159,7 @@ CREATE TABLE discount_descriptions (
 CREATE TABLE discount_redemptions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  discount_id INT NOT NULL,
+  discount_id INT,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (discount_id) REFERENCES discounts(id)
 );

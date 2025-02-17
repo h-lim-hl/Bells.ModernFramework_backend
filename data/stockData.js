@@ -44,3 +44,9 @@ async function setProductStock(product_id, numStock) {
     throw (err);
   }
 }
+
+module.exports = {
+  getProductsStock,
+  getDetailedProductsStock,
+  setProductStock
+};

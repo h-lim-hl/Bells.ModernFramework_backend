@@ -1,10 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const cartService = require("../services/cartService");
 const authenicateToken = require("../middlewares/userAuth");
 
-
-
+const router = express.Router();
 router.use(authenicateToken);
 
 // GET cart contents

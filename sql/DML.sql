@@ -10,7 +10,7 @@ INSERT INTO product_stock (product_id)
 SELECT id
 FROM products;
 
-INSERT INTO staff_types (staff_type) 
+INSERT INTO role_types (role_type) 
 VALUES ("test_owner"), ("owner"), ("manager"), ("staff");
 
 INSERT INTO marketing_preferences (id, preference) VALUES (1, 'email');  -- Email Marketing
@@ -19,6 +19,10 @@ INSERT INTO marketing_preferences (id, preference) VALUES (2, 'sms');    -- SMS 
 INSERT INTO discount_types (name) VALUES
   ("period_code"), ("single_code"), ("user_code");
 
-INSERT INTO discounts (name, code, discount_type, start_datetime, end_datetime, amount, description) VALUES
-("period_discount", "PERIOD10", 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 181 DAY), 0.1, "Test Peroid Discount"),
-("single_code", "WELCOME25", 2, NULL, NULL, 0.25, "Test New User Discount");
+INSERT INTO discounts (name, code, discount_type, start_datetime, end_datetime, amount, description_id) VALUES
+("period_discount", "PERIOD10", 1, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 181 DAY), 0.1, 1),
+("single_code", "WELCOME25", 3, NULL, NULL, 0.25, 2);
+
+INSERT INTO discount_descriptions (discount_id, description) VALUES
+(1, "Test Peroid Discount"),
+(2, "Test New User Discount");

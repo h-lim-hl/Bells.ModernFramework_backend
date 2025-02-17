@@ -3,6 +3,51 @@ const pool = require("../database");
 const DISCOUNT_TABLE = "discounts";
 const DISCOUNT_TYPE_TABLE = "discount_types";
 const REDEMPTION_TABLE = "discount_redemptions";
+const DISCOUNT_DESCRIPTIONS = "discount_descriptions";
+const USER_DISCOUNTS = "personal_discounts";
+
+async function getDiscountDetails(discount_id) {
+  // NEED TO REFERENCE DML FOR VALUES
+  try {
+    const [rows] = await pool.query(
+      `
+        SELECT d.name, code, dt.name,
+               start_datetime, end_datetime,
+               amount, description, assigned_to,
+        FROM ${DISCOUNT_TABLE} d
+        JOIN ${DISCOUNT_TYPE_TABLE} dt
+          ON d.id = dt.discount_id
+        LEFT JOIN ${DISCOUNT_DESCRIPTIONS} dd
+          ON dd.discount_id
+        LEFT JOIN ${USER_DISCOUNTS} ud
+          ON d.id = ud.discount_id
+        WHERE d.id = ?
+      `, [discount_id]
+    );
+  } catch (err) {
+
+  }
+}
+
+async function getDiscountListings() {
+  try {
+    const [rows] = await pool.query(
+      `
+        SELECT d.name, code, dt.name,
+               start_datetime, end_datetime,
+               amount, description
+        FROM ${DISCOUNT_TABLE} d
+        JOIN ${DISCOUNT_TYPE_TABLE} dt
+          ON ${DISCOUNT_TABLE}.id = ${DISCOUNT_TYPE_TABLE}.discount_id
+        LEFT JOIN ${DISCOUNT_DESCRIPTIONS}
+          ON ${DISCOUNT_DESCRIPTIONS}.discount_id;
+      `
+    );
+    return rows;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 async function getValidDiscountCodes() {
   try {
@@ -83,5 +128,7 @@ module.exports = {
   getValidPeriodCodes,
   getRedeemableSingleCodes,
   getRedeemablePersonalCodes,
-  getRedeemableCodes
+  getRedeemableCodes,
+  getDiscountDetails,
+  getDiscountListings
 }

@@ -105,8 +105,7 @@ async function getUserRole(user_id) {
       WHERE users.id = ?;
     `, [user_id]
   );
-
-  return rows;
+  return rows[0];
 }
 
 module.exports = {
