@@ -13,8 +13,9 @@ const usersRouter = require("./routes/users");
 const cartRoutes = require("./routes/cart");
 const checkoutRoutes = require("./routes/checkout");
 const stripeRoutes = require("./routes/stripe");
-const csrfRoutes = require("./routes/csrf");
-
+//const csrfRoutes = require("./routes/csrf");
+const imageUploadRoutes = require("./routes/imageUpload");
+const stockManagementRoutes = require("./routes/stock");
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN_LIST,
@@ -36,6 +37,9 @@ app.use("/api/cart", express.json(), cartRoutes);
 app.use("/api/checkout", express.json(), checkoutRoutes);
 // app.use("/api/csrf", express.json(), csrfRoutes);
 app.use("/api/stripe", stripeRoutes);
+app.use("api/imageUpload", express.json(), imageUploadRoutes);
+app.use("api/stock", express.json(), stockManagementRoutes);
+
 
 
 const PORT = process.env.PORT || 3000;
